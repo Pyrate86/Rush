@@ -1,16 +1,32 @@
+/*
+Si X existe en dans la Tete
+sinon
+la Queue deviens nouvelle liste envoyee a exists
+*/
 exists(X,[X|_]).
 exists(X,[_|Y]) :- exists(X,Y).
 
+
+%G est il a gauche de D ... simple non ?
 gauche_droite(G,D,[G,D,_,_,_]).
 gauche_droite(G,D,[_,G,D,_,_]).
 gauche_droite(G,D,[_,_,G,D,_]).
 gauche_droite(G,D,[_,_,_,G,D]).
 
+/*
+X et Y sont ils voisins dans la liste L
+X a Gauche de Y
+sinon
+Y a gauche de X
+*/
 voisin(X,Y,L) :- gauche_droite(X,Y,L).
 voisin(X,Y,L) :- gauche_droite(Y,X,L).
 
 /* 
  [Nationalite,Couleur,Animal,Boisson,Fumer]
+ creation de la liste avec la premiere maison et celle du milieu
+ pour on suit ce qui est dis dans le sujet
+ et enfin on ajoute le poisson
 */
 
 solution(S) :-
