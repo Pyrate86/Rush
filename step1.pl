@@ -46,10 +46,10 @@ femme(X) :- couple(_,X).
 recherche (mari, femme)
 si le mari et la femme sont en couple alors on renvois l'homme
 */
-mari_de(X,Y) :- couple(X,Y), homme(X).
+mari_de(Homme,Femme) :- couple(Homme,Femme), homme(Homme).
 
 %idem que pour les mari
-femme_de(Y,X) :- couple(X,Y), femme(Y).
+femme_de(Femme,Homme) :- couple(Homme,Femme), femme(Femme).
 
 /*
 recherche si X est le pere de Y
@@ -59,8 +59,8 @@ recherche si X est la mere de Z
 on cherche le mari Y de X dans les couples
 puis on recherche dans la liste des parents avec le Y
 */
-enfant_de(Y,X) :- parent(X,Y).
-enfant_de(Z,X) :- parent(Y,Z), couple(Y,X).
+enfant_de(Enfant,Pere) :- parent(Pere,Enfant).
+enfant_de(Enfant,Mere) :- parent(Pere,Enfant), couple(Pere,Mere).
 
 
 /*
@@ -68,12 +68,12 @@ recherche si X est le beau pere de Z
 on regarde si Z est en couple avec Y
 on recherche alors le parent male de Y
 */
-beaupere_de(X,Z) :- couple(Z,Y), parent(X,Y).
-beaupere_de(X,Z) :- couple(Y,Z), parent(X,Y).
+beaupere_de(Pere,Conjoint) :- couple(Conjoint,Enfant), parent(Pere,Enfant).
+beaupere_de(Pere,Conjoint) :- couple(Enfant,Conjoint), parent(Pere,Enfant).
 
 
 %On recherche la femme X du beau pere Y de Z
-bellemere_de(X,Z) :- femme_de(X,Y), beaupere_de(Y,Z).
+bellemere_de(Mere,Conjoint) :- femme_de(Mere,Enfant), beaupere_de(Enfant,Conjoint).
 
 /*
 si Y est l enfant de X alors X est l ancetre de Y
@@ -81,5 +81,5 @@ sinon
 on cherche de qui (Y) est l enfant Z,
 et on cherche si X est l ancetre de Y (reccursive)
 */
-ancetre_de(X,Y) :- enfant_de(Y,X).
-ancetre_de(X,Z) :- enfant_de(Z,Y), ancetre_de(X,Y).
+ancetre_de(Ancetre,Enfant) :- enfant_de(Enfant,Ancetre).
+ancetre_de(Ancetre,Descendant) :- enfant_de(Descendant,Enfant), ancetre_de(Ancetre,Enfant).
