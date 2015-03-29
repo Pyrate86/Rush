@@ -31,7 +31,7 @@ out([X,Y]) :-
 	visu([Y],[Y]),
     !.
 out([X, Y|Z]) :- 
-    visu([X], [Y]),
+    visu([X],[Y]),
     writenl(''),
     append([Y], Z, L),
     out(L).
