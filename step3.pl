@@ -7,8 +7,8 @@ change_state(n, Loup, n, Chou, s, Loup, s, Chou).
 change_state(s, Loup, Chevre, s, n, Loup, Chevre, n).
 change_state(n, Loup, Chevre, n, s, Loup, Chevre, s).
 
-legal(P,_,C,_) :- P = C, !.
-legal(P,L,_,C) :- P = L, P= C, !.
+legal(P,_,G,_) :- P=G, !.
+legal(P,W,_,C) :- P=W, P=C, !.
 
 go :- pretFeuGo([(n,n,n,n)],L), out(L), !.
 
@@ -18,25 +18,39 @@ pretFeuGo([(Pecor, Loup, Chevre, Chou)|L],Path) :-
 
     change_state(Pecor, Loup, Chevre, Chou, Pecor1, Loup1, Chevre1, Chou1),
 
-    \+ not(legal(Pecor1, Loup1, Chevre1, Chou1)),
+    legal(Pecor1, Loup1, Chevre1, Chou1),
     
     \+ member((Pecor1, Loup1, Chevre1, Chou1),L),
     
     pretFeuGo([(Pecor1, Loup1, Chevre1, Chou1),(Pecor, Loup, Chevre, Chou)|L],Path).
 
-%/* Sortie des differents mouvements
-out([X,Y]) :-
-	write(X),
-	write(" => "),
-	write(Y), !.
-out([X,Y|Z]) :- 
-    write(""),
-	write(X),
-    write(" => "),
-    write(Y),
-	writeln(""),
-    append([Y],Z, L),
-    out(L).
-%*/
 
-%/* Sortie graphique
+out([X,Y]) :-
+	visu([X],[Y]),
+	writenl(''),
+	visu([Y],[Y]),
+    !.
+out([X, Y|Z]) :- 
+    visu([X], [Y]),
+    writenl(''),
+    append([Y], Z, L),
+    out(L).
+
+visu([(Peon,Loup,Chevre,Choux)], [(PeonNext, LoupNext, ChevreNext, ChouxNext)]) :-
+    writenl('####~~~~####'),
+    writenl('#   ~~~~   #'),
+    side(Peon, PeonNext, 'P'),
+    side(Loup, LoupNext, 'W'),
+    side(Chevre, ChevreNext, 'G'),
+    side(Choux, ChouxNext, 'C'),
+    writenl('#   ~~~~   #'),
+    writenl('####~~~~####').
+
+side(X, Y, C) :-
+    X == n, Y == n,
+    write('# '), write(C), write(' ~~~~   #'), writenl('');
+    X == n, Y == s,
+    write('# '), write(C), write(' >>>>   #'), writenl('');
+    X == s, Y == s,
+    write('#   ~~~~ '), write(C), write(' #'), writenl('');
+    write('#   <<<< '), write(C), write(' #'), writenl('').

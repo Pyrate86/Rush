@@ -44,4 +44,4 @@ exists([_,_,_,biere,blue_master],S),
 exists([allemand,_,_,_,prince],S),
 voisin([norvegien,_,_,_,_],[_,bleue,_,_,_],S),
 voisin([_,_,_,_,blend],[_,_,_,eau,_],S),
-exists([_,_,poisson,_,_],S).
+exists([_,_,poisson,_,_],S), !.
