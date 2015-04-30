@@ -27,12 +27,12 @@ pretFeuGo([(Pecor, Loup, Chevre, Chou)|L],Path) :-
 
 out([X,Y]) :-
 	visu([X],[Y]),
-	writenl(''),
+	nl,
 	visu([Y],[Y]),
     !.
 out([X, Y|Z]) :- 
     visu([X],[Y]),
-    writenl(''),
+    nl,
     append([Y], Z, L),
     out(L).
 
@@ -48,9 +48,9 @@ visu([(Peon,Loup,Chevre,Choux)], [(PeonNext, LoupNext, ChevreNext, ChouxNext)]) 
 
 side(X, Y, C) :-
     X == n, Y == n,
-    write('# '), write(C), write(' ~~~~   #'), writenl('');
+    write('# '), write(C), write(' ~~~~   #'), nl;
     X == n, Y == s,
-    write('# '), write(C), write(' >>>>   #'), writenl('');
+    write('# '), write(C), write(' >>>>   #'), nl;
     X == s, Y == s,
-    write('#   ~~~~ '), write(C), write(' #'), writenl('');
-    write('#   <<<< '), write(C), write(' #'), writenl('').
+    write('#   ~~~~ '), write(C), write(' #'), nl;
+    write('#   <<<< '), write(C), write(' #'), nl.
