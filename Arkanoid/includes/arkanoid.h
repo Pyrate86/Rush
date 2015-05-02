@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arkanoid.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lscopel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:48 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/02 18:40:53 by lscopel          ###   ########.fr       */
+/*   Updated: 2015/05/02 22:59:01 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,33 @@ typedef struct		s_coord
 
 typedef struct		s_square
 {
-	float			x;
-	float			y;
-	float			w;
-	float			h;
+	int			x;
+	int			y;
+	int			w;
+	int			h;
 }					t_square;
 
 typedef struct		s_color
 {
-	float			r;
-	float			g;
-	float			b;
-	float			a;
+	int			r;
+	int			g;
+	int			b;
+	int			a;
 }					t_color;
 
 typedef struct		s_brick
 {
-	float			x;
-	float			y;
-	float			w;
-	float			h;
+	int			x;
+	int			y;
+	int			w;
+	int			h;
 	int				type;
 	t_color			clr;
 	struct s_brick	*next;
 }					t_brick;
 
-t_brick				**draw_brick(int level, t_brick **b);
+void	draw_brick(t_brick **b, int level);
 void				draw_square(t_square sqr, t_color clr);
-t_square			square(float x, float y, float w, float h);
-t_color				color(float r, float g, float b, float a);
+t_square			square(int x, int y, int w, int h);
+t_color				color(int r, int g, int b, int a);
 #endif
