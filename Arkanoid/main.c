@@ -6,7 +6,7 @@
 /*   By: lscopel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:22 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/02 06:55:05 by lscopel          ###   ########.fr       */
+/*   Updated: 2015/05/02 18:40:14 by lscopel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void		draw_square(t_square sqr, t_color clr)
 int			main(void)
 {
 	GLFWwindow* window;
+	t_brick	**b;
 
 	glfwSetErrorCallback(error_callback);
 	if (!(glfwInit()))
@@ -92,6 +93,7 @@ int			main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	rot = 0;
+	b = NULL;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
@@ -109,16 +111,18 @@ int			main(void)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		//glRotatef((float) glfwGetTime() * 50.f * rot, 0.f, 0.f, 1.f);
-		draw_square(square(200.f, 150.f, 100.f, 100.f), color(.1f, 1.f, 0.f, 1.f));
+		//draw_square(square(200.f, 150.f, 100.f, 100.f), color(.1f, 1.f, 0.f, 1.f));
+		b = draw_brick(0, b);
 		glTranslatef(0.1f * rot, 0.f, 0.f);
 		draw_square(square(100.f, 100.f, 100.f, 100.f), color(.5f, 0.f, 1.f, 0.8f));
-		draw_brick();
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
+	//Au changement de level, vider la liste
+	//free_bricks(b);
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return (0);

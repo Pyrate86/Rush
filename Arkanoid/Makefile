@@ -6,7 +6,7 @@
 #    By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 15:35:12 by ghilbert          #+#    #+#              #
-#    Updated: 2015/05/01 23:09:17 by lscopel          ###   ########.fr        #
+#    Updated: 2015/05/02 16:05:33 by lscopel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRC_PATH	= ./
 OBJ_PATH	= obj/
 INC_PATH	= includes/
 
-SRC_NAME	=	main.c
+SRC_NAME	=	main.c \
+				brick.c
 
 HEADER 		=	$(INC_PATH)arkanoid.h
 
