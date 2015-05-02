@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:48 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/02 22:59:01 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 00:05:39 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,27 @@ typedef struct		s_square
 
 typedef struct		s_color
 {
-	int			r;
-	int			g;
-	int			b;
-	int			a;
+	size_t	r;
+	size_t	g;
+	size_t	b;
+	size_t	a;
 }					t_color;
 
 typedef struct		s_brick
 {
-	int			x;
-	int			y;
-	int			w;
-	int			h;
+	float			x;
+	float			y;
+	float			w;
+	float			h;
 	int				type;
 	t_color			clr;
 	struct s_brick	*next;
 }					t_brick;
 
-void	draw_brick(t_brick **b, int level);
+void				draw_brick(t_brick **b, int level);
 void				draw_square(t_square sqr, t_color clr);
 t_square			square(int x, int y, int w, int h);
-t_color				color(int r, int g, int b, int a);
+t_color				color(size_t r, size_t g, size_t b, size_t a);
+t_coord				coord(int x, int y);
+
 #endif

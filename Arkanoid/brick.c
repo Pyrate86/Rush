@@ -6,11 +6,32 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/02 22:46:27 by ghilbert          #+#    #+#             */
-/*   Updated: 2015/05/02 23:45:58 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 00:15:06 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arkanoid.h"
+
+char		*get_path(int lvl)
+{
+	char	*path;
+	char	**tmp;
+	int		i;
+	path = getenv("_");
+	tmp = ft_strsplit(path, '/');
+	i = 0;
+	path = tmp[0][0] == '.' ? tmp[i++] : "";
+	while (tmp[i + 1])
+	{
+		path = ft_strjoin(path, "/");
+		path = ft_strjoin(path, tmp[i]);
+		i++;
+	}
+	path = ft_strjoin(path, "/../levels/");
+	path = ft_strjoin(path, ft_itoa(lvl));
+	path = ft_strjoin(path, ".ygg");
+	return (path);
+}
 
 void	add_brick(t_brick **b, t_coord p, char buff)
 {
@@ -24,39 +45,56 @@ void	add_brick(t_brick **b, t_coord p, char buff)
 		new->w = BRICK_WIDTH;
 		new->h = BRICK_HEIGHT;
 		new->type = buff - ' ';
-		new->clr = color(0x10 * ((int)new->type % 10), 0x7F, 0x25 * new->type / 10, 255);
+		new->clr = color(0x7F * new->type % 3, 0x7F * new->type % 4, 0x7F * new->type % 2, 255);
 			new->next = *b;
 		*b = new;
 	}
 }
 
+void	creat_list(t_brick **b, int lvl)
+{
+	char	*path;
+	char buff;
+	int ret;
+	int fd;
+	t_coord	p;
+
+	path = get_path(lvl);
+	fd = open(path, O_RDONLY);
+	p.x = 0;
+	p.y = 0;
+	while((ret = read(fd, &buff, 1)) > 0)
+	{
+		if (buff == ' ')
+			p.x++;
+		else if (buff == '\n')
+		{
+			p.x = 0;
+			p.y++;
+		}
+		else
+		{
+			add_brick(b, p, buff);
+			p.x++;
+		}
+	}
+	close(fd);
+}
+
 void	print_brick(t_brick *b)
 {
-	ft_putendl("#### ####");
 	while (b != NULL)
 	{
-		ft_putstr("\e[93m");
-		ft_putchar(b->type + ' ');
-		ft_putstr("\e[0m=>\e[93m");
-		ft_putnbr(b->x);
-		ft_putendl("\e[0m");
+		draw_square(square(b->x, b->y, b->w, b->h), b->clr);
 		b = b->next;
 	}
-	ft_putendl("#### ####");
 }
 
 void	draw_brick(t_brick **b, int level)
 {
-	int i = 0;
-	t_coord = 
 	if (!*b)
 	{
-		while (i < 4)
-		{
-			add_brick(b, );
-			i++;
-		}
-	print_brick(*b);
+		creat_list(b, level);	
 	}
-
+	print_brick(*b);
 }
