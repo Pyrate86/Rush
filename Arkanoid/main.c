@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:22 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/02 22:59:14 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/02 23:40:00 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int			main(void)
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		draw_brick(&b, 5);
+		draw_brick(&b, 0);
 
 		glfwSwapBuffers(window);
 
