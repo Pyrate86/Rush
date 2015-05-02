@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   brick.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lscopel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/05/02 05:45:02 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/02 18:50:08 by lscopel          ###   ########.fr       */
+/*   Created: 2015/05/02 22:46:27 by ghilbert          #+#    #+#             */
+/*   Updated: 2015/05/03 00:54:35 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,43 +33,38 @@ char		*get_path(int lvl)
 	return (path);
 }
 
-void		add_brick(char buff, t_coord p, t_brick **b)
+void	add_brick(t_brick **b, t_coord p, char buff)
 {
 	t_brick	*new;
-	
-	new = (t_brick *)malloc(sizeof(t_brick));
-	new->x = p.x * BRICK_WIDTH;
-	new->y = p.y * BRICK_HEIGHT;
-	new->w = BRICK_WIDTH;
-	new->h = BRICK_HEIGHT;
-	new->type = buff - ' ';
-	if (b == NULL)
-		new->next = NULL;
-	else
-		new->next = *b;
-	new->clr = color(0.3f * ((int)new->type % 10), 1.f, 0.3f * new->type / 10, 1.f);
-	*b = new;
-	//draw_square(square(new->x, new->y, new->w, new->h), new->clr);
 
+	new = (t_brick *)malloc(sizeof(t_brick));
+	if (new)
+	{
+		new->x = p.x * BRICK_WIDTH;
+		new->y = p.y * BRICK_HEIGHT;
+		new->w = BRICK_WIDTH;
+		new->h = BRICK_HEIGHT;
+		new->type = buff - ' ';
+		new->clr = color(0.5f * (new->type % 3), 0.5f * (new->type % 4), 0.5f * (new->type % 2), 1.f);
+			new->next = *b;
+		*b = new;
+	}
 }
 
-t_brick		**create_list(int level, t_brick **b)
+void	creat_list(t_brick **b, int lvl)
 {
 	char	*path;
 	char buff;
 	int ret;
 	int fd;
 	t_coord	p;
-	t_brick	**tmp;
 
-	tmp = b;
-	path = get_path(level);
+	path = get_path(lvl);
 	fd = open(path, O_RDONLY);
 	p.x = 0;
 	p.y = 0;
 	while((ret = read(fd, &buff, 1)) > 0)
 	{
-		ft_putchar(buff);
 		if (buff == ' ')
 			p.x++;
 		else if (buff == '\n')
@@ -79,51 +74,27 @@ t_brick		**create_list(int level, t_brick **b)
 		}
 		else
 		{
-			add_brick(buff, p, tmp);
+			add_brick(b, p, buff);
 			p.x++;
 		}
 	}
 	close(fd);
-	return (tmp);
 }
 
-t_brick		**draw_brick(int level, t_brick **b)
+void	print_brick(t_brick *b)
 {
-	t_brick	*tmp;
+	while (b != NULL)
+	{
+		draw_square(square(b->x, b->y, b->w, b->h), b->clr);
+		b = b->next;
+	}
+}
 
-	tmp = (t_brick *)malloc(sizeof(t_brick));
-	tmp->x = 0;
-	tmp->y = 0;
-	tmp->w = 100;
-	tmp->h = 100;
-	tmp->type = 0;
-	tmp->clr = color(1.0f, 0.f, 0.f, 1.f);
-	tmp->next = NULL;
-	if (!b)
+void	draw_brick(t_brick **b, int level)
+{
+	if (!*b)
 	{
-		ft_putendl("VIDE");
-		b = &tmp;
-		//b = NULL;
-		b = create_list(level, b);
+		creat_list(b, level);	
 	}
-/*
-	t_brick **c = b;
-ft_putnbr((*c)->x);
-	while (*c)
-	{
-		draw_square(square((*c)->x, (*c)->y, (*c)->w, (*c)->h), (*c)->clr);
-		*c = (*c)->next;
-	}
-//*/
-//*
-	ft_putstr("\e[92m");
-	ft_putnbr((*b)->x);
-	ft_putendl("\e[0m");
-	while (*b)
-	{
-		draw_square(square((*b)->x, (*b)->y, (*b)->w, (*b)->h), (*b)->clr);
-		*b = (*b)->next;
-	}
-//*/
-	return (b);
+	print_brick(*b);
 }

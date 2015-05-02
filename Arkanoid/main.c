@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lscopel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:22 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/02 18:40:14 by lscopel          ###   ########.fr       */
+/*   Updated: 2015/05/03 00:56:59 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arkanoid.h"
 
-int		rot = 0;
+int		move = 0;
 
 void error_callback(int error, const char* description)
 {
@@ -27,9 +27,9 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		rot -= 50;
+		move -= 50;
 	if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		rot += 50;
+		move += 50;
 }
 
 t_color		color(float r, float g, float b, float a)
@@ -43,7 +43,7 @@ t_color		color(float r, float g, float b, float a)
 	return (c);
 }
 
-t_square	square(float x, float y, float w, float h)
+t_square	square(int x, int y, int w, int h)
 {
 	t_square	s;
 	
@@ -54,26 +54,35 @@ t_square	square(float x, float y, float w, float h)
 	return (s);
 }
 
+t_coord		coord(int x, int y)
+{
+	t_coord p;
+
+	p.x = x;
+	p.y = y;
+	return (p);
+}
+
 void		draw_square(t_square sqr, t_color clr)
 {
 		glBegin(GL_QUADS);
 		glColor4f(clr.r, clr.g, clr.b, clr.a);
-		glVertex3f(sqr.x, sqr.y, 0.f);
-		glVertex3f(sqr.x + sqr.w, sqr.y, 0.f);
-		glVertex3f(sqr.x + sqr.w, sqr.y + sqr.h, 0.f);
-		glVertex3f(sqr.x, sqr.y + sqr.h, 0.f);
+		glVertex2i(sqr.x, sqr.y);
+		glVertex2i(sqr.x + sqr.w, sqr.y);
+		glVertex2i(sqr.x + sqr.w, sqr.y + sqr.h);
+		glVertex2i(sqr.x, sqr.y + sqr.h);
 		glEnd();
 }
 
 int			main(void)
 {
 	GLFWwindow* window;
-	t_brick	**b;
+	t_brick	*b;
 
 	glfwSetErrorCallback(error_callback);
 	if (!(glfwInit()))
 		exit(EXIT_FAILURE);
-	window = glfwCreateWindow(640, 480, "Yggdrasil", NULL, NULL);
+	window = glfwCreateWindow(612, 480, "Yggdrasil", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -92,7 +101,7 @@ int			main(void)
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-	rot = 0;
+	move = 0;
 	b = NULL;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -102,19 +111,16 @@ int			main(void)
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 
-		/* Render here */
-		//float ratio = width / (float) height;
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0.0f, width, height, 0.0f, 0.0f, 1.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		//glRotatef((float) glfwGetTime() * 50.f * rot, 0.f, 0.f, 1.f);
-		//draw_square(square(200.f, 150.f, 100.f, 100.f), color(.1f, 1.f, 0.f, 1.f));
-		b = draw_brick(0, b);
-		glTranslatef(0.1f * rot, 0.f, 0.f);
-		draw_square(square(100.f, 100.f, 100.f, 100.f), color(.5f, 0.f, 1.f, 0.8f));
+		glTranslatef(0.1f * move, 0.f, 0.f);
+		draw_square(square(10, 10, 100, 100), color(0.3f, 0.f, 0.85f, 1.f));
+		glLoadIdentity();
+		draw_brick(&b, 0);
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 
