@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:22 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/03 00:05:28 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 00:20:39 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int			main(void)
 	glfwSetErrorCallback(error_callback);
 	if (!(glfwInit()))
 		exit(EXIT_FAILURE);
-	window = glfwCreateWindow(640, 480, "Yggdrasil", NULL, NULL);
+	window = glfwCreateWindow(612, 480, "Yggdrasil", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -111,19 +111,15 @@ int			main(void)
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 
-		/* Render here */
-		//float ratio = width / (float) height;
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0.0f, width, height, 0.0f, 0.0f, 1.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		//glRotatef((float) glfwGetTime() * 50.f * rot, 0.f, 0.f, 1.f);
-		//draw_square(square(200.f, 150.f, 100.f, 100.f), color(.1f, 1.f, 0.f, 1.f));
 		draw_brick(&b, 0);
 		glTranslatef(0.1f * rot, 0.f, 0.f);
-		draw_square(square(100, 100, 100, 100), color(0x7F, 0, 0xFF, 0xCC));
+		draw_square(square(100, 100, 100, 100), color(0xFF, 0xFF, 0xFF, 0xFF));
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 
