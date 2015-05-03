@@ -6,7 +6,7 @@
 #    By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 15:35:12 by ghilbert          #+#    #+#              #
-#    Updated: 2015/05/03 08:22:23 by ghilbert         ###   ########.fr        #
+#    Updated: 2015/05/03 21:49:54 by ghilbert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ INCLUDES	= -I $(INC_PATH) -I libft/includes -I glfw/include
 SRC_NAME	=	main.c \
 				brick.c \
 				draw_circle.c \
-				colliboule.c
+				colliboule.c \
+				init.c
 				
 HEADER 		=	$(INC_PATH)arkanoid.h
 

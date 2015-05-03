@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:48 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/03 08:24:13 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 21:45:25 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,25 @@
 
 # define LINES	36
 # define COLUMNS	16
-// # define WIN_WIDTH		612
-// # define WIN_HEIGHT		480
+
+typedef struct		s_player
+{
+	int				life;
+	int				score;
+	int				level;
+}					t_player;
+
+typedef struct 		s_barre
+{
+	float			speed;
+	int				move;
+}					t_barre;
+
+typedef struct 		s_boule
+{
+	float			speed;
+	float			size;
+}					t_boule;
 
 typedef struct 		s_windw
 {
@@ -67,10 +84,7 @@ typedef struct		s_color
 
 typedef struct		s_brick
 {
-	float			x;
-	float			y;
-	float			w;
-	float			h;
+	t_square		brick;
 	int				type;
 	t_color			clr;
 	struct s_brick	*next;
@@ -85,5 +99,8 @@ t_circle			circle(t_coord center, float radius, int nbface);
 t_color				color(float r, float g, float b, float a);
 t_coord				coord(int x, int y);
 t_windw				*get_windw(void);
+t_barre				*get_barre(void);
+t_player			*get_player(void);
+void				init_level(t_brick *b);
 
 #endif

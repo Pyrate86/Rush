@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/02 22:46:27 by ghilbert          #+#    #+#             */
-/*   Updated: 2015/05/03 04:25:04 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 22:09:51 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,22 @@ char		*get_path(int lvl)
 	return (path);
 }
 
+t_color	color_type(int t)
+{
+	t_color c;
+	if (t < 5 && t > 0)
+		c = color(0.f, 1.f, 0.f, 1.f);
+	else if (t < 9)
+		c = color(1.f, 1.f, 0.f, 1.f);
+	else if (t < 13)
+		c = color(1.f, 0.f, 0.f, 1.f);
+	else if (t < 17)
+		c = color(0.4f, 0.3f, 0.6f, 1.f);
+	else
+		c = color(0.2f, 0.2f, 0.3f, 1.f);
+	return (c);
+}
+
 void	add_brick(t_brick **b, t_coord p, char buff)
 {
 	t_brick	*new;
@@ -40,12 +56,12 @@ void	add_brick(t_brick **b, t_coord p, char buff)
 	new = (t_brick *)malloc(sizeof(t_brick));
 	if (new)
 	{
-		new->w = COLUMNS;
-		new->h = LINES;
-		new->x = p.x;
-		new->y = p.y;
+		new->brick.w = COLUMNS;
+		new->brick.h = LINES;
+		new->brick.x = p.x;
+		new->brick.y = p.y;
 		new->type = buff - ' ';
-		new->clr = color(0.5f * (new->type % 3), 0.5f * (new->type % 4), 0.5f * (new->type % 2), 1.f);
+		new->clr = color_type(new->type);
 			new->next = *b;
 		*b = new;
 	}
@@ -81,21 +97,12 @@ void	creat_list(t_brick **b, int lvl)
 	close(fd);
 }
 
-t_windw	*get_windw(void)
-{
-	static t_windw	*windw;
-	if (!windw)
-	{
-		windw = (t_windw *)ft_memalloc(sizeof(t_windw));
-	}
-	return (windw);
-}
-
 void	print_brick(t_brick *b)
 {
 	while (b != NULL)
 	{
-		draw_square(square(b->x * ((get_windw())->win_width / b->w), b->y * ((get_windw())->win_height / b->h), (get_windw())->win_width / b->w, (get_windw())->win_height / b->h), b->clr);
+		if (b->type > 0)
+		draw_square(square(b->brick.x * ((get_windw())->win_width / b->brick.w), b->brick.y * ((get_windw())->win_height / b->brick.h), (get_windw())->win_width / b->brick.w, (get_windw())->win_height / b->brick.h), color_type(b->type));
 		b = b->next;
 	}
 }
@@ -104,7 +111,7 @@ void	draw_brick(t_brick **b, int level)
 {
 	if (!*b)
 	{
-		creat_list(b, level);	
+		creat_list(b, level);
 	}
 	print_brick(*b);
 }

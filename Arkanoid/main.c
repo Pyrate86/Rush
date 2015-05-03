@@ -6,13 +6,58 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:22 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/03 09:00:42 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 22:06:07 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arkanoid.h"
 
-int		move = 0;
+t_windw	*get_windw(void)
+{
+	static t_windw	*windw;
+	if (!windw)
+	{
+		windw = (t_windw *)ft_memalloc(sizeof(t_windw));
+	}
+	return (windw);
+}
+
+t_boule	*get_boule(void)
+{
+	static t_boule	*boule;
+	if (!boule)
+	{
+		boule = (t_boule *)ft_memalloc(sizeof(t_boule));
+		boule->speed = 2.f;
+		boule->size = 1.f;
+	}
+	return (boule);
+}
+
+t_barre	*get_barre(void)
+{
+	static t_barre	*barre;
+	if (!barre)
+	{
+		barre = (t_barre *)ft_memalloc(sizeof(t_barre));
+		barre->speed = 0.6f;
+		barre->move = 0;
+	}
+	return (barre);
+}
+
+t_player	*get_player(void)
+{
+	static t_player	*player;
+	if (!player)
+	{
+		player = (t_player *)ft_memalloc(sizeof(t_player));
+		player->level = 0;
+		player->life = 2;
+		player->score = 0;
+	}
+	return (player);
+}
 
 void error_callback(int error, const char* description)
 {
@@ -27,9 +72,9 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		move -= 50;
+		(get_barre())->move -= 50;
 	if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		move += 50;
+		(get_barre())->move += 50;
 }
 
 t_color		color(float r, float g, float b, float a)
@@ -77,7 +122,7 @@ void		draw_square(t_square sqr, t_color clr)
 int			main(void)
 {
 	GLFWwindow* window;
-	t_brick	*b;
+	t_brick		*b;
 
 	(get_windw())->win_width = 600;
 	(get_windw())->win_height = 300;
@@ -100,20 +145,17 @@ int			main(void)
 
 	/* Interval */
 	glfwSwapInterval(1);
-
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
-
-	move = 0;
 	b = NULL;
 	t_coord	loop;
-	loop.x = 402;
-	loop.y = 216;
+	loop.x = (get_windw())->win_width / 2;
+	loop.y = 300 - (((get_windw())->win_height / LINES) * 2) - (((get_windw())->win_height / LINES) / 4);
 	t_coord		mov;
 	t_square	barre;
 	mov.x = -1;
 	mov.y = -1;
-	/* Loop until the user closes the window */
+	get_player();
 	while (!glfwWindowShouldClose(window))
 	{
 		/*FrameBufferSize */
@@ -129,16 +171,14 @@ int			main(void)
 		glOrtho(0.0f, width, height, 0.0f, 0.0f, 1.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glTranslatef(0.6f * move, 0.f, 0.f);
-		// draw_square(square(width / 2 - (width / COLUMNS * 2), height - (height / LINES - 10), width / COLUMNS * 2, height / LINES), color(0.3f, 0.f, 0.85f, 1.f));
-		barre = square(width / 2, height - (height / LINES) * 2, width / COLUMNS * 2, (height / LINES));
+		glTranslatef(0.6f * (get_barre())->move, 0.f, 0.f);
+		barre = square(width / 2 - width / COLUMNS, height - (height / LINES) * 2, width / COLUMNS * 2, (height / LINES));
 		draw_square(barre, color(0.3f, 0.f, 0.85f, 1.f));
-		barre.x += (0.6f * move);
+		barre.x += (0.6f * (get_barre())->move);
 		glLoadIdentity();
-		draw_brick(&b, 0);
+		draw_brick(&b, (get_player())->level);
 
 		// MOUVEMENT BALLE
-		//glTranslatef(0.6f * (float)loop.x, 0.6f * (float)loop.y, 0);
 		glTranslatef((float)loop.x, (float)loop.y, 0);
 		
 		colliboule(&mov, b, barre, &loop);
@@ -150,8 +190,6 @@ int			main(void)
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
-	//Au changement de level, vider la liste
-	//free_bricks(b);
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return (0);
