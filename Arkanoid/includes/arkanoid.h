@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:48 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/03 21:45:25 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 23:07:51 by lscopel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ t_windw				*get_windw(void);
 t_barre				*get_barre(void);
 t_player			*get_player(void);
 void				init_level(t_brick *b);
+void				error_cb(int error, const char *description);
 
 #endif
