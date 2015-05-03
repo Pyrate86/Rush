@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/03 08:21:40 by ghilbert          #+#    #+#             */
-/*   Updated: 2015/05/03 22:09:28 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 23:04:27 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,22 @@
 
 void	collibarre(t_square barre)
 {
-	if ((barre.x + barre.w) >= (get_windw())->win_width - (get_windw())->win_width / COLUMNS)
-		{
-			(get_barre())->move = ((get_windw())->win_width / 2) + (get_windw())->win_width / COLUMNS;
-		}
-	if (barre.x <= (get_windw())->win_width / COLUMNS)
-		{
-			(get_barre())->move = -((get_windw())->win_width / 2) - barre.w;
-		}
-		
+	int	width;
+
+	width = (get_windw())->win_width;
+	if ((barre.x + barre.w) >= width - width / COLUMNS)
+		(get_barre())->move = (width / 2) + width / COLUMNS;
+	if (barre.x <= width / COLUMNS)
+		(get_barre())->move = -(width / 2) - barre.w;
 }
 
 int		collision(t_square boule, t_square barre)
 {
-	if((barre.x >= boule.x + boule.w)      // trop à droite
-	|| (barre.x + barre.w <= boule.x) // trop à gauche
-	|| (barre.y >= boule.y + boule.h) // trop en bas
-	|| (barre.y + barre.h <= boule.y))  // trop en haut
-          return (0);
-	
+	if ((barre.x >= boule.x + boule.w)
+	|| (barre.x + barre.w <= boule.x)
+	|| (barre.y >= boule.y + boule.h)
+	|| (barre.y + barre.h <= boule.y))
+		return (0);
 	if (boule.x <= barre.x)
 		return (1);
 	else if ((boule.x + boule.w) >= (barre.x + barre.w))
@@ -42,25 +39,19 @@ int		collision(t_square boule, t_square barre)
 	return (4);
 }
 
-int		next_level(t_brick *b)
-{
-	while (b)
-	{
-		if (b->type >= 1 && b->type <= 13)
-			return (0);
-		b = b->next;
-	}
-	return (1);
-}
-
 int		collibrick(t_brick *b, t_square boule)
 {
-	int ret;
+	int			ret;
+	int			width;
+	int			height;
+	t_square	brick;
 
-	ret = 0;
 	while (b)
 	{
-		ret = collision(boule, square(b->brick.x * ((get_windw())->win_width / b->brick.w), b->brick.y * ((get_windw())->win_height / b->brick.h), (get_windw())->win_width / b->brick.w, (get_windw())->win_height / b->brick.h));
+		width = (get_windw())->win_width / b->brick.w;
+		height = (get_windw())->win_height / b->brick.h;
+		brick = square(b->brick.x * width, b->brick.y * height, width, height);
+		ret = collision(boule, brick);
 		if (ret && b->type > 0)
 		{
 			if (b->type >= 1 && b->type <= 13)
@@ -68,13 +59,7 @@ int		collibrick(t_brick *b, t_square boule)
 				b->type -= 1;
 				(get_player())->score += 1;
 				if (next_level(b))
-				{
-					
-					// (get_player())->level += 1;
-					// if ((get_player())->level > 2)
-						exit (0);
-					// init_level(b);
-				}
+					exit (0);
 			}
 			return (ret);
 		}
@@ -83,71 +68,30 @@ int		collibrick(t_brick *b, t_square boule)
 	return (0);
 }
 
-void	loose_life(t_coord *mov, t_coord *loop)
+t_norme	norme(t_coord *a, t_coord *b)
 {
-	loop->x = (get_windw())->win_width / 2;
-	loop->y = 300 - (((get_windw())->win_height / LINES) * 2) - (((get_windw())->win_height / LINES) / 4);
-	mov->x = -1;
-	mov->y = -1;
-	(get_player())->life -= 1;
-	if ((get_player())->life < 1)
-		exit(0);
+	t_norme	n;
+
+	n.mov = a;
+	n.loop = b;
+	return (n);
 }
 
 void	colliboule(t_coord *mov, t_brick *b, t_square barre, t_coord *loop)
 {
 	t_square	boule;
-	
+
 	boule.w = ((get_windw())->win_height / LINES);
 	boule.h = boule.w;
 	boule.x = loop->x - (boule.w / 2);
 	boule.y = loop->y - (boule.h / 2);
-	(void)b;
-
-
 	collibarre(barre);
 	if (mov->x == 1)
-	{
-		if (collision(boule, barre) == 1 || collibrick(b, boule) == 1)
-			mov->x = -mov->x;
-		else
-		{
-			loop->x++;
-			if ((boule.x + boule.w) > ((get_windw())->win_width))
-				mov->x = -mov->x;
-		}
-	}
+		collit(boule, barre, b, norme(mov, loop));
 	else
-	{
-		if (collision(boule, barre) == 3 || collibrick(b, boule) == 3)
-			mov->x = -mov->x;
-		else
-		{
-			loop->x--;
-			if (boule.x < 0)
-				mov->x = -mov->x;
-		}
-	}
+		collib(boule, barre, b, norme(mov, loop));
 	if (mov->y == 1)
-	{
-		if (collision(boule, barre) == 2 || collibrick(b, boule) == 2)
-			mov->y = -mov->y;
-		else
-		{
-			loop->y++;
-			if ((boule.y + boule.h) > ((get_windw())->win_height))
-				loose_life(mov, loop);//mov->y = -mov->y;
-		}
-	}
+		collil(boule, barre, b, norme(mov, loop));
 	else
-	{
-		if (collision(boule, barre) == 4 || collibrick(b, boule) == 4)
-			mov->y = -mov->y;
-		else
-		{
-			loop->y--;
-			if (boule.y < 0)
-				mov->y = -mov->y;
-		}
-	}
+		collir(boule, barre, b, norme(mov, loop));
 }

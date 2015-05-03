@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:48 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/03 21:45:25 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 23:03:57 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,12 @@ typedef struct		s_color
 	float	a;
 }					t_color;
 
+typedef struct		s_norme
+{
+	t_coord			*mov;
+	t_coord			*loop;
+}					t_norme;
+
 typedef struct		s_brick
 {
 	t_square		brick;
@@ -102,5 +108,16 @@ t_windw				*get_windw(void);
 t_barre				*get_barre(void);
 t_player			*get_player(void);
 void				init_level(t_brick *b);
+
+
+int					collibrick(t_brick *b, t_square boule);
+int					collision(t_square boule, t_square barre);
+void				collit(t_square bl, t_square br, t_brick *b, t_norme p);
+void				collib(t_square bl, t_square br, t_brick *b, t_norme p);
+void				collil(t_square bl, t_square br, t_brick *b, t_norme p);
+void				collir(t_square bl, t_square br, t_brick *b, t_norme p);
+
+int					next_level(t_brick *b);
+
 
 #endif

@@ -6,7 +6,7 @@
 #    By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 15:35:12 by ghilbert          #+#    #+#              #
-#    Updated: 2015/05/03 21:49:54 by ghilbert         ###   ########.fr        #
+#    Updated: 2015/05/03 23:04:04 by ghilbert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ SRC_NAME	=	main.c \
 				brick.c \
 				draw_circle.c \
 				colliboule.c \
-				init.c
+				init.c \
+				collisions.c \
+				funcs.c
 				
 HEADER 		=	$(INC_PATH)arkanoid.h
 
