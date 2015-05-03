@@ -6,7 +6,7 @@
 #    By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 15:35:12 by ghilbert          #+#    #+#              #
-#    Updated: 2015/05/03 02:18:38 by ghilbert         ###   ########.fr        #
+#    Updated: 2015/05/03 02:31:04 by ghilbert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,20 +39,21 @@ OBJS 		= $(addprefix $(OBJ_PATH),$(subst .c,.o,$(SRC_NAME)))
 BIN			= $(addprefix $(BIN_PATH),$(NAME))
 
 
-.PHONY: all clean fclean re proper debug debugall libft
+.PHONY: all clean fclean re proper debug debugall libft glfw
 
 all:	$(NAME)
 
 $(NAME): $(BIN)
 
-$(BIN): $(OBJS) $(HEADER) libft/libft.a | $(BIN_PATH)
+$(BIN): glfw/src/libglfw3.a libft/libft.a $(OBJS) $(HEADER) | $(BIN_PATH)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(BIN) $(LIBS)
 
-libft/libft.a:
+glfw/src/libglfw3.a:
 	git submodule init
 	git submodule update
 	cd glfw; cmake . ;make
 
+libft/libft.a:
 	make -C libft
 
 $(OBJS): | $(OBJ_PATH)
