@@ -6,11 +6,20 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/03 08:21:40 by ghilbert          #+#    #+#             */
-/*   Updated: 2015/05/03 10:33:53 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 10:48:34 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arkanoid.h"
+
+void	collibarre(t_square barre)
+{
+	if ((barre.x + barre.w) >= (get_windw())->win_width)
+		ft_putendl("trop facho");
+	if (barre.x <= 0)
+		ft_putendl("trop coco");
+		
+}
 
 int		collision(t_square boule, t_square barre)
 {
@@ -32,6 +41,7 @@ int		collision(t_square boule, t_square barre)
 
 void	colliboule(t_coord *mov, t_brick *b, t_square barre, t_coord *loop)
 {
+	collibarre(barre);
 	t_square	boule;
 	
 	boule.w = ((get_windw())->win_height / LINES);
