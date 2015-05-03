@@ -6,7 +6,7 @@
 #    By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 15:35:12 by ghilbert          #+#    #+#              #
-#    Updated: 2015/05/03 02:31:04 by ghilbert         ###   ########.fr        #
+#    Updated: 2015/05/03 08:22:23 by ghilbert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,10 @@ INC_PATH	= includes/
 INCLUDES	= -I $(INC_PATH) -I libft/includes -I glfw/include
 
 SRC_NAME	=	main.c \
-				brick.c
-
+				brick.c \
+				draw_circle.c \
+				colliboule.c
+				
 HEADER 		=	$(INC_PATH)arkanoid.h
 
 LIBFT_PATH	= libft
@@ -29,7 +31,9 @@ LIBFT		= -L$(LIBFT_PATH) $(LIBFT_NAME)
 
 LIBGL	= -L glfw/src/ -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
-LIBS		= $(LIBFT) $(LIBGL)
+OTHER_LIB = -lm
+
+LIBS		= $(LIBFT) $(LIBGL) $(OTHER_LIB)
 
 CC			= gcc
 CFLAGS		+= -Wall -Werror -Wextra

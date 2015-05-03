@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:22 by lscopel           #+#    #+#             */
-/*   Updated: 2015/05/03 00:56:59 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 09:00:42 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,20 @@ int			main(void)
 	GLFWwindow* window;
 	t_brick	*b;
 
+	(get_windw())->win_width = 600;
+	(get_windw())->win_height = 300;
 	glfwSetErrorCallback(error_callback);
 	if (!(glfwInit()))
 		exit(EXIT_FAILURE);
-	window = glfwCreateWindow(612, 480, "Yggdrasil", NULL, NULL);
+	window = glfwCreateWindow((get_windw())->win_width, (get_windw())->win_height, "Yggdrasil", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
 		return -1;
 	}
+	/* Make the window's context current */
+	glfwMakeContextCurrent(window);
+	
 	glfwSetKeyCallback(window, key_callback);
 
 	/* Time since initialization 
@@ -99,10 +104,15 @@ int			main(void)
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
 	move = 0;
 	b = NULL;
+	t_coord	loop;
+	loop.x = 402;
+	loop.y = 216;
+	t_coord		mov;
+	t_square	barre;
+	mov.x = -1;
+	mov.y = -1;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
@@ -110,6 +120,8 @@ int			main(void)
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
+		(get_windw())->win_width = width;
+		(get_windw())->win_height = height;
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_PROJECTION);
@@ -117,10 +129,21 @@ int			main(void)
 		glOrtho(0.0f, width, height, 0.0f, 0.0f, 1.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glTranslatef(0.1f * move, 0.f, 0.f);
-		draw_square(square(10, 10, 100, 100), color(0.3f, 0.f, 0.85f, 1.f));
+		glTranslatef(0.6f * move, 0.f, 0.f);
+		// draw_square(square(width / 2 - (width / COLUMNS * 2), height - (height / LINES - 10), width / COLUMNS * 2, height / LINES), color(0.3f, 0.f, 0.85f, 1.f));
+		barre = square(width / 2, height - (height / LINES) * 2, width / COLUMNS * 2, (height / LINES));
+		draw_square(barre, color(0.3f, 0.f, 0.85f, 1.f));
+		barre.x += (0.6f * move);
 		glLoadIdentity();
 		draw_brick(&b, 0);
+
+		// MOUVEMENT BALLE
+		//glTranslatef(0.6f * (float)loop.x, 0.6f * (float)loop.y, 0);
+		glTranslatef((float)loop.x, (float)loop.y, 0);
+		
+		colliboule(&mov, b, barre, &loop);
+		
+		draw_circle(circle(coord(0, 0), (height / LINES) / 2, 30));
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 

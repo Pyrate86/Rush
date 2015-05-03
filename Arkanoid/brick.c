@@ -6,7 +6,7 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/02 22:46:27 by ghilbert          #+#    #+#             */
-/*   Updated: 2015/05/03 00:54:35 by ghilbert         ###   ########.fr       */
+/*   Updated: 2015/05/03 04:25:04 by ghilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void	add_brick(t_brick **b, t_coord p, char buff)
 	new = (t_brick *)malloc(sizeof(t_brick));
 	if (new)
 	{
-		new->x = p.x * BRICK_WIDTH;
-		new->y = p.y * BRICK_HEIGHT;
-		new->w = BRICK_WIDTH;
-		new->h = BRICK_HEIGHT;
+		new->w = COLUMNS;
+		new->h = LINES;
+		new->x = p.x;
+		new->y = p.y;
 		new->type = buff - ' ';
 		new->clr = color(0.5f * (new->type % 3), 0.5f * (new->type % 4), 0.5f * (new->type % 2), 1.f);
 			new->next = *b;
@@ -81,11 +81,21 @@ void	creat_list(t_brick **b, int lvl)
 	close(fd);
 }
 
+t_windw	*get_windw(void)
+{
+	static t_windw	*windw;
+	if (!windw)
+	{
+		windw = (t_windw *)ft_memalloc(sizeof(t_windw));
+	}
+	return (windw);
+}
+
 void	print_brick(t_brick *b)
 {
 	while (b != NULL)
 	{
-		draw_square(square(b->x, b->y, b->w, b->h), b->clr);
+		draw_square(square(b->x * ((get_windw())->win_width / b->w), b->y * ((get_windw())->win_height / b->h), (get_windw())->win_width / b->w, (get_windw())->win_height / b->h), b->clr);
 		b = b->next;
 	}
 }
