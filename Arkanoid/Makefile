@@ -6,7 +6,7 @@
 #    By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 15:35:12 by ghilbert          #+#    #+#              #
-#    Updated: 2015/05/02 16:05:33 by lscopel          ###   ########.fr        #
+#    Updated: 2015/05/03 02:18:38 by ghilbert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ BIN_PATH	= bin/
 SRC_PATH	= ./
 OBJ_PATH	= obj/
 INC_PATH	= includes/
+INCLUDES	= -I $(INC_PATH) -I libft/includes -I glfw/include
 
 SRC_NAME	=	main.c \
 				brick.c
@@ -28,7 +29,7 @@ LIBFT		= -L$(LIBFT_PATH) $(LIBFT_NAME)
 
 LIBGL	= -L glfw/src/ -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
-LIBS		= $(LIBFT)  $(LIBGL)
+LIBS		= $(LIBFT) $(LIBGL)
 
 CC			= gcc
 CFLAGS		+= -Wall -Werror -Wextra
@@ -40,20 +41,24 @@ BIN			= $(addprefix $(BIN_PATH),$(NAME))
 
 .PHONY: all clean fclean re proper debug debugall libft
 
-all:	$(BIN)
+all:	$(NAME)
 
 $(NAME): $(BIN)
 
 $(BIN): $(OBJS) $(HEADER) libft/libft.a | $(BIN_PATH)
-	$(CC) $(CFLAGS) -I$(INC_PATH) $(OBJS) -o $(BIN) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(BIN) $(LIBS)
 
 libft/libft.a:
+	git submodule init
+	git submodule update
+	cd glfw; cmake . ;make
+
 	make -C libft
 
 $(OBJS): | $(OBJ_PATH)
 
 $(OBJ_PATH)%.o : %.c $(HEADER)
-	$(CC) -c $(CFLAGS) $< -o $@ -I $(INC_PATH)
+	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDES)
 
 $(OBJ_PATH):
 	@if [ ! -d "$(OBJ_PATH)" ]; then \
