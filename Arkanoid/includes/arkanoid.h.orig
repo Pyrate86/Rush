@@ -6,7 +6,11 @@
 /*   By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/01 22:14:48 by lscopel           #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2015/05/03 23:03:57 by ghilbert         ###   ########.fr       */
+=======
 /*   Updated: 2015/05/03 23:07:51 by lscopel          ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +114,7 @@ t_player			*get_player(void);
 void				init_level(t_brick *b);
 void				error_cb(int error, const char *description);
 
+<<<<<<< HEAD
 
 int					collibrick(t_brick *b, t_square boule);
 int					collision(t_square boule, t_square barre);
@@ -122,3 +127,6 @@ int					next_level(t_brick *b);
 
 
 #endif
+=======
+#endif
+>>>>>>> main

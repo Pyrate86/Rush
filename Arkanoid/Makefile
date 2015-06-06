@@ -6,7 +6,7 @@
 #    By: ghilbert <ghilbert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 15:35:12 by ghilbert          #+#    #+#              #
-#    Updated: 2015/05/03 23:04:04 by ghilbert         ###   ########.fr        #
+#    Updated: 2015/05/03 23:43:27 by ghilbert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,12 @@ INCLUDES	= -I $(INC_PATH) -I libft/includes -I glfw/include
 SRC_NAME	=	main.c \
 				brick.c \
 				draw_circle.c \
+				draw_square.c \
 				colliboule.c \
 				init.c \
+				get_info.c \
+				structs.c \
+				callback_error.c \
 				collisions.c \
 				funcs.c
 				
@@ -46,7 +50,7 @@ OBJS 		= $(addprefix $(OBJ_PATH),$(subst .c,.o,$(SRC_NAME)))
 BIN			= $(addprefix $(BIN_PATH),$(NAME))
 
 
-.PHONY: all clean fclean re proper debug debugall libft glfw
+.PHONY: all clean fclean re proper debug debugall
 
 all:	$(NAME)
 
